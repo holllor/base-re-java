@@ -387,7 +387,7 @@ public class DBF extends Object {
 				for (i = 0; i < MDXfile.getAnchor().getIndexes(); i++)
 					jNDXes.add(MDXfile.MDXes[i]);
 			} catch (xBaseJException xbe) {
-				String missing = Util.getxBaseJProperty("ignoreMissingMDX").toLowerCase();
+			                            String missing = Util.getxBaseJProperty("ignoreMissingMDX").toLowerCase();
 				if (missing != null && (missing.compareTo("true") == 0 || missing.compareTo("yes")==0) )
 			     MDX_exist = 0;
 			    else  {
