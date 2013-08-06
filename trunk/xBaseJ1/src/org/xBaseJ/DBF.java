@@ -1618,7 +1618,7 @@ public class DBF extends Object {
 		wb = 0x1a;
         file.writeByte(wb);
 
-
+/* убирает проблему с записью
 		if (MDX_exist != 1 && (version == DBASEIII || version == DBASEIII_WITH_MEMO)) {
 			buffer.position(0);
 			channel.write(buffer);
@@ -1626,7 +1626,7 @@ public class DBF extends Object {
 			for (i = 0; i < lrecl; i++)
 			    file.writeByte(wb);;
 		}
-
+*/
 
 
 
