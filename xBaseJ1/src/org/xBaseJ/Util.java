@@ -1,40 +1,45 @@
 package org.xBaseJ;
+
 /**
  * xBaseJ - Java access to dBase files
- *<p>Copyright 1997-2011 - American Coders, LTD  - Raleigh NC USA
- *<p>All rights reserved
- *<p>Currently supports only dBase III format DBF, DBT and NDX files
- *<p>                        dBase IV format DBF, DBT, MDX and NDX files
-*<p>American Coders, Ltd
-*<br>P. O. Box 97462
-*<br>Raleigh, NC  27615  USA
-*<br>1-919-846-2014
-*<br>http://www.americancoders.com
-@author Joe McVerry, American Coders Ltd.
-@version 2.2.0
-*
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * <p>
+ * Copyright 1997-2011 - American Coders, LTD - Raleigh NC USA
+ * <p>
+ * All rights reserved
+ * <p>
+ * Currently supports only dBase III format DBF, DBT and NDX files
+ * <p>
+ * dBase IV format DBF, DBT, MDX and NDX files
+ * <p>
+ * American Coders, Ltd
+ * <br>P. O. Box 97462
+ * <br>Raleigh, NC 27615 USA
+ * <br>1-919-846-2014
+ * <br>http://www.americancoders.com
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * @author Joe McVerry, American Coders Ltd.
+ * @version 2.2.0
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library Lesser General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
  *
  * You should have received a copy of the GNU Library Lesser General Public
- * License along with this library; if not, write to the Free
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * License along with this library; if not, write to the Free Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- *  Change History
- *  Date      Developer                 Desc
- *  20110401  Joe McVerry (jrm)   created static field x86Architecture to reduce # of system calls.
- *  20110707  Joe McVerry (jrm)   Properties are not loaded from classpath. In this case is propIS != null, but propFIle == null.
- *  							tracker ID: 3335370
- 
-*/
-
+ * Change History Date Developer Desc 20110401 Joe McVerry (jrm) created static
+ * field x86Architecture to reduce # of system calls. 20110707 Joe McVerry (jrm)
+ * Properties are not loaded from classpath. In this case is propIS != null, but
+ * propFIle == null. tracker ID: 3335370
+ *
+ */
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,9 +51,6 @@ import java.io.InputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xBaseJ.fields.DateField;
-
-
-
 
 public class Util extends Object {
 
@@ -66,32 +68,30 @@ public class Util extends Object {
 
     static boolean recheckProperties;
 
-	private static String servletContextPath = null;
-	
-	private static boolean x86Architecture = ((System.getProperty("os.arch").indexOf("86") == 0)
+    private static String servletContextPath = null;
+
+    private static boolean x86Architecture = ((System.getProperty("os.arch").indexOf("86") == 0)
             && (System.getProperty("os.arch").compareTo("vax") != 0));
 
-    static 	{
+    static {
         try {
 
-		String test = getxBaseJProperty("checkPropertyFileForChanges");
-		if (test.length() > 0)
-		   recheckProperties = (test.compareToIgnoreCase("true")==0 || test.compareToIgnoreCase("yes")==0);
-		}
-		catch (Exception e)
-		{
-			logr.error(e.getMessage(), e);
-		}
-		finally {
-			logr.debug("recheckProperties is " + recheckProperties);
+            String test = getxBaseJProperty("checkPropertyFileForChanges");
+            if (test.length() > 0) {
+                recheckProperties = (test.compareToIgnoreCase("true") == 0 || test.compareToIgnoreCase("yes") == 0);
+            }
+        } catch (Exception e) {
+            logr.error(e.getMessage(), e);
+        } finally {
+            logr.debug("recheckProperties is " + recheckProperties);
 
-		}
+        }
     }
 
-
     public static long x86(long in) {
-        if (x86Architecture)
+        if (x86Architecture) {
             return in;
+        }
 
         boolean negative = false;
         long is;
@@ -102,10 +102,12 @@ public class Util extends Object {
             //          in = ((byte) in & 0x7fffffffffffffff);
         }
         first = in >>> 56;
-        if (negative)
+        if (negative) {
             first = (byte) in & 0x7f;
-        if (negative == true)
+        }
+        if (negative == true) {
             first |= 0x80;
+        }
         isnt = first << 56;
         save = in - isnt;
         second = save >>> 48;
@@ -145,8 +147,9 @@ public class Util extends Object {
             in &= 0x7fffffff;
         }
         first = in >>> 24;
-        if (negative == true)
+        if (negative == true) {
             first |= 0x80;
+        }
         in = save & 0x00ff0000;
         second = in >>> 16;
         in = save & 0x0000ff00;
@@ -157,8 +160,9 @@ public class Util extends Object {
     }
 
     public static short x86(short in) {
-        if (x86Architecture)
+        if (x86Architecture) {
             return in;
+        }
         short is, save = in;
         boolean negative = false;
         int first, second;
@@ -167,8 +171,9 @@ public class Util extends Object {
             in &= 0x7fff;
         }
         first = in >>> 8;
-        if (negative == true)
+        if (negative == true) {
             first |= 0x80;
+        }
         second = save & 0x00ff;
         is = (short) ((second << 8) + first);
         return is;
@@ -181,37 +186,44 @@ public class Util extends Object {
     public static double doubleDate(String s) {
         int i;
 
-        if (s.trim().length() == 0)
+        if (s.trim().length() == 0) {
             return 1e100;
+        }
 
         int year = Integer.parseInt(s.substring(0, 4));
-        if (year == 0)
+        if (year == 0) {
             return 1e100;
+        }
 
-        int days[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+        int days[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
         int month = Integer.parseInt(s.substring(4, 6));
         int day = Integer.parseInt(s.substring(6, 8));
 
         int daydif = 2378497;
 
-        if ((year / 4) == 0)
+        if ((year / 4) == 0) {
             days[2] = 29;
+        }
 
         if (year > 1799) {
             daydif += day - 1;
-            for (i = 2; i <= month; i++)
+            for (i = 2; i <= month; i++) {
                 daydif += days[i - 1];
+            }
             daydif += (year - 1800) * 365;
             daydif += ((year - 1800) / 4);
             daydif -= ((year - 1800) % 100); // leap years don't occur in 00
-                                             // years
+            // years
             if (year > 1999) // except in 2000
+            {
                 daydif++;
+            }
         } else {
             daydif -= (days[month] - day + 1);
-            for (i = 11; i >= month; i--)
+            for (i = 11; i >= month; i--) {
                 daydif -= days[i + 1];
+            }
             daydif -= (1799 - year) * 365;
             daydif -= (1799 - year) / 4;
         }
@@ -230,29 +242,32 @@ public class Util extends Object {
     public static String normalize(String inString) {
         int i;
         StringBuffer sb = new StringBuffer();
-        for (i = 0; i < inString.length(); i++)
+        for (i = 0; i < inString.length(); i++) {
             switch (inString.charAt(i)) {
-            case '&':
-                sb.append("&amp;");
-                break;
-            case '<':
-                sb.append("&lt;");
-                break;
-            case '>':
-                sb.append("&gt;");
-                break;
-            case '"':
-                sb.append("&quot;");
-                break;
-            case '\'':
-                sb.append("&apos;");
-                break;
-            default:
-                if (inString.charAt(i) < ' ') // what to do with control codes
-                    sb.append(inString.charAt(i) + '\uee00');
-                else
-                    sb.append(inString.charAt(i));
+                case '&':
+                    sb.append("&amp;");
+                    break;
+                case '<':
+                    sb.append("&lt;");
+                    break;
+                case '>':
+                    sb.append("&gt;");
+                    break;
+                case '"':
+                    sb.append("&quot;");
+                    break;
+                case '\'':
+                    sb.append("&apos;");
+                    break;
+                default:
+                    if (inString.charAt(i) < ' ') // what to do with control codes
+                    {
+                        sb.append(inString.charAt(i) + '\uee00');
+                    } else {
+                        sb.append(inString.charAt(i));
+                    }
             }
+        }
 
         return new String(sb);
     }
@@ -270,12 +285,11 @@ public class Util extends Object {
 
                 propIS = getPropertiesFile();
                 if (propIS != null) {
-                	lastUpdate = propFile.lastModified();
-                	logr.debug("loading properties");
-                	props.load(propIS);
+                    lastUpdate = propFile.lastModified();
+                    logr.debug("loading properties");
+                    props.load(propIS);
                 }
-            }
-            else  if (propFile != null && recheckProperties == true) {
+            } else if (propFile != null && recheckProperties == true) {
                 //propFile = new File(propFile.getAbsolutePath());
                 if (lastUpdate < propFile.lastModified()) {
                     props = new java.util.Properties();
@@ -287,9 +301,11 @@ public class Util extends Object {
                 }
             }
             String rets = props.getProperty(inString);
-            if (rets != null)
+            if (rets != null) {
                 rets = rets.trim();
-            else rets = "";
+            } else {
+                rets = "";
+            }
             return rets;
         }
     }
@@ -300,53 +316,54 @@ public class Util extends Object {
      * @param inValue value of property
      */
     public static void setxBaseJProperty(String inName, String inValue) throws IOException {
-    	synchronized (props) {
-    		props.put(inName, inValue);
+        synchronized (props) {
+            props.put(inName, inValue);
 
-		}
+        }
 
     }
 
     /**
      * returns true if org.xBaseJ.property dontTrimFields is "true" or "yes"
+     *
      * @return boolean false or true
      */
-    public static boolean dontTrimFields()
-    {
-    	String prop;
-		try {
-			prop = getxBaseJProperty("trimFields");
-		} catch (IOException e) {
-			return false;
-		}
-        if (prop.toLowerCase().compareTo("yes") == 0)
-        		return true;
-        if (prop.toLowerCase().compareTo("true") == 0)
-        		return true;
+    public static boolean dontTrimFields() {
+        String prop;
+        try {
+            prop = getxBaseJProperty("trimFields");
+        } catch (IOException e) {
+            return false;
+        }
+        if (prop.toLowerCase().compareTo("yes") == 0) {
+            return true;
+        }
+        if (prop.toLowerCase().compareTo("true") == 0) {
+            return true;
+        }
         return false;
     }
 
     /**
      * returns true if org.xBaseJ.property fieldFilled is "true" or "yes"
+     *
      * @return boolean false or true
      */
-    public static boolean fieldFilledWithSpaces()
-    {
-    	String prop;
-		try {
-			prop = getxBaseJProperty("fieldFilledWithSpaces");
-		} catch (IOException e) {
-			return false;
-		}
-        if (prop.toLowerCase().compareTo("yes") == 0)
-        		return true;
-        if (prop.toLowerCase().compareTo("true") == 0)
-        		return true;
+    public static boolean fieldFilledWithSpaces() {
+        String prop;
+        try {
+            prop = getxBaseJProperty("fieldFilledWithSpaces");
+        } catch (IOException e) {
+            return false;
+        }
+        if (prop.toLowerCase().compareTo("yes") == 0) {
+            return true;
+        }
+        if (prop.toLowerCase().compareTo("true") == 0) {
+            return true;
+        }
         return false;
     }
-
-
-
 
     /**
      * static class method to build the properties file input stream see
@@ -360,92 +377,92 @@ public class Util extends Object {
      * </ul>
      *
      * @return InputStream org.xBaseJ.properties file
-     * @throws xBaseJException
-     *             io error most likely
+     * @throws xBaseJException io error most likely
      */
-	private static InputStream getPropertiesFile()  {
-		String xBaseJPropertiesFileName = "org.xBaseJ.properties";
+    private static InputStream getPropertiesFile() {
+        String xBaseJPropertiesFileName = "org.xBaseJ.properties";
 
-		String _fileName = System.getProperty(xBaseJPropertiesFileName);
-		if (_fileName != null)
-		    xBaseJPropertiesFileName = _fileName;
-		File f3, f2, f1 = new File(xBaseJPropertiesFileName);
-		if (f1.exists())
+        String _fileName = System.getProperty(xBaseJPropertiesFileName);
+        if (_fileName != null) {
+            xBaseJPropertiesFileName = _fileName;
+        }
+        File f3, f2, f1 = new File(xBaseJPropertiesFileName);
+        if (f1.exists())
 			try {
-				propFile = f1;
-				logr.debug("properties file loaded from "+f1.getAbsolutePath());
-				return new FileInputStream(f1);
-			} catch (FileNotFoundException fnfe) {
-				fnfe.printStackTrace();
-				return null;
-			} else {
-			xBaseJPropertiesFileName =
-				System.getProperty("user.home") + "/org.xBaseJ.properties";
-			f2 = new File(xBaseJPropertiesFileName);
-			if (f2.exists())
+            propFile = f1;
+            logr.debug("properties file loaded from " + f1.getAbsolutePath());
+            return new FileInputStream(f1);
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+            return null;
+        } else {
+            xBaseJPropertiesFileName
+                    = System.getProperty("user.home") + "/org.xBaseJ.properties";
+            f2 = new File(xBaseJPropertiesFileName);
+            if (f2.exists())
 				try {
-					propFile = f2;
-					logr.debug("properties file loaded from "+f2.getAbsolutePath());
-					return new FileInputStream(f2);
-				} catch (FileNotFoundException fnfe) {
-					fnfe.printStackTrace();
-					return null;
-				} else {
-				xBaseJPropertiesFileName =
-					System.getProperty("java.home") + "/org.xBaseJ.properties";
-				f3 = new File(xBaseJPropertiesFileName);
-				if (f3.exists()) {
-					try {
-						propFile = f3;
-						logr.debug("properties file loaded from "+f3.getAbsolutePath());
-						return new FileInputStream(f3);
-					} catch (FileNotFoundException fnfe) {
-						fnfe.printStackTrace();
-						return null;
-					}
-				}
-				else {
+                propFile = f2;
+                logr.debug("properties file loaded from " + f2.getAbsolutePath());
+                return new FileInputStream(f2);
+            } catch (FileNotFoundException fnfe) {
+                fnfe.printStackTrace();
+                return null;
+            } else {
+                xBaseJPropertiesFileName
+                        = System.getProperty("java.home") + "/org.xBaseJ.properties";
+                f3 = new File(xBaseJPropertiesFileName);
+                if (f3.exists()) {
+                    try {
+                        propFile = f3;
+                        logr.debug("properties file loaded from " + f3.getAbsolutePath());
+                        return new FileInputStream(f3);
+                    } catch (FileNotFoundException fnfe) {
+                        fnfe.printStackTrace();
+                        return null;
+                    }
+                } else {
 
-					InputStream is = (new Util()).getClass().getResourceAsStream("/org.xBaseJ.properties");
-					if (is == null) {
-					 if (servletContextPath == null) // try it again
-						is = ClassLoader.getSystemClassLoader().getResourceAsStream("org.xBaseJ.properties");
-					 else { // context is not null
-					   try {
-						is = new FileInputStream(servletContextPath + "/org.xBaseJ.properties");
-						logr.debug("properties file loaded from servlet context path "+servletContextPath + "/org.xBaseJ.properties");
-						propFile = new File(servletContextPath + "/org.xBaseJ.properties");
+                    InputStream is = (new Util()).getClass().getResourceAsStream("/org.xBaseJ.properties");
+                    if (is == null) {
+                        if (servletContextPath == null) // try it again
+                        {
+                            is = ClassLoader.getSystemClassLoader().getResourceAsStream("org.xBaseJ.properties");
+                        } else { // context is not null
+                            try {
+                                is = new FileInputStream(servletContextPath + "/org.xBaseJ.properties");
+                                logr.debug("properties file loaded from servlet context path " + servletContextPath + "/org.xBaseJ.properties");
+                                propFile = new File(servletContextPath + "/org.xBaseJ.properties");
 
-					   }
-					   catch (IOException ioe){
-					 	logr.debug("Searched for org.xBaseJ.properties as " + servletContextPath + "/org.xBaseJ.properties");
-					     }
-					  }
-					}
-					if (is != null) {
-						logr.debug("properties file loaded from classpath");
-						return is;
-					} else {
-						logr.debug(
-							"Searched for org.xBaseJ.properties as "
-								+ f1.getAbsolutePath());
-						logr.debug(
-							"Searched for org.xBaseJ.properties as "
-								+ f2.getAbsolutePath());
-						logr.debug(
-							"Searched for org.xBaseJ.properties as "
-								+ f3.getAbsolutePath());
-						logr.debug(
-							"Searched for org.xBaseJ.properties in classpath environment variable");
-						return null;
-					}
-				}
-			}
+                            } catch (IOException ioe) {
+                                logr.debug("Searched for org.xBaseJ.properties as " + servletContextPath + "/org.xBaseJ.properties");
+                            }
+                        }
+                    }
+                    if (is != null) {
+                        logr.debug("properties file loaded from classpath");
+                        return is;
+                    } else {
+                        logr.debug(
+                                "Searched for org.xBaseJ.properties as "
+                                + f1.getAbsolutePath());
+                        logr.debug(
+                                "Searched for org.xBaseJ.properties as "
+                                + f2.getAbsolutePath());
+                        logr.debug(
+                                "Searched for org.xBaseJ.properties as "
+                                + f3.getAbsolutePath());
+                        logr.debug(
+                                "Searched for org.xBaseJ.properties in classpath environment variable");
+                        return null;
+                    }
+                }
+            }
 
-	}
+        }
 
-}
-	  /**
+    }
+
+    /**
      * use this if you need to reset the property file which is usually left
      * open
      *
@@ -468,28 +485,30 @@ public class Util extends Object {
         }
     }
 
-	public static void copyFile(String inputFile, String outputFile)
-		throws IOException {
-		FileInputStream fis = new FileInputStream(inputFile);
-		FileOutputStream fos = new FileOutputStream(outputFile);
-		for (int b = fis.read(); b != -1; b = fis.read())
-			fos.write(b);
-		fos.close();
-		fis.close();
+    public static void copyFile(String inputFile, String outputFile)
+            throws IOException {
+        FileInputStream fis = new FileInputStream(inputFile);
+        FileOutputStream fos = new FileOutputStream(outputFile);
+        for (int b = fis.read(); b != -1; b = fis.read()) {
+            fos.write(b);
+        }
+        fos.close();
+        fis.close();
 
-	}
-	/**
-	 * @return boolean true if property says use shared locks
-	 */
-	public static boolean useSharedLocks() {
-		String usl;
-		try {
-			usl = getxBaseJProperty("useSharedLocks").toLowerCase();
-		} catch (IOException e) {
-			logr.error(e.getMessage(), e);
-			usl = "false";
-		}
-		return (usl.compareTo("true") == 0);
-	}
+    }
+
+    /**
+     * @return boolean true if property says use shared locks
+     */
+    public static boolean useSharedLocks() {
+        String usl;
+        try {
+            usl = getxBaseJProperty("useSharedLocks").toLowerCase();
+        } catch (IOException e) {
+            logr.error(e.getMessage(), e);
+            usl = "false";
+        }
+        return (usl.compareTo("true") == 0);
+    }
 
 }
